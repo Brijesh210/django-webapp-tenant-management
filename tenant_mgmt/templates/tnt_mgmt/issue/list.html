@@ -1,0 +1,38 @@
+{% extends "./base.html" %} {% block content %}
+{% load extra_filters %}
+{% if request.user|has_groups:"administrator|manager" %}
+  <h1>All Available Issues</h1>
+{% endif %}
+{% if request.user|has_groups:"employee" %}
+  <h1>Issues Assigned To Me</h1>
+{% endif %}
+{% if request.user|has_groups:"tenant" %}
+  <h1>Issues Submitted By Me</h1>
+{% endif %}
+{% for issue in issues %}
+<article class="media content-section">
+  <div class="media-body">
+    <div class="article-metadata">
+      <a class="mr-2" href="{% url 'issueDetails' issue.id %}"> <b> {{ issue }} </b></a>
+      <small class="text-muted"
+        >Created: {{ issue.created}} , Last Updated {{issue.updated}}</small>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <small> Current Status: {{issue.status}}</small>
+        </div>
+        <div class="col-md-auto">
+          <a class="btn btn-primary btn-sm" href="{% url 'issueEdit' issue.id %}" role="button">Edit</a>
+        </div>
+        <div class="col col-lg-2">
+          <a class="btn btn-primary btn-sm" href="{% url 'issueDelete' issue.id %}" role="button">Delete</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
+{% empty %}
+<small>Empty</small>
+{% endfor %} 
+{% endblock content %}

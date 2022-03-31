@@ -1,0 +1,56 @@
+{% extends "./base.html" %} {% block content %}
+<article class="media content-section">
+  <div class="media-body">
+    <div class="article-metadata">
+      <a class="mr-2" href="#">{{ property.name }}</a>
+      <small class="text-muted">{{ property.dateAdded }}</small>
+    </div>
+    <small><b> Property Owner: </b></small>
+    <ul>
+      <li>
+        <small
+          ><a class="article-title" href="{% url 'profile' %}"
+            >{{ property.owner.username }}</a
+          ></small
+        >
+      </li>
+    </ul>
+    <small><b>List of tenants: </b></small> <br />
+    {% for tenant in property.tenants.all %}
+    <ul>
+      <li>
+        <small
+          ><a class="article-title" href="{% url 'profile' %}"
+            >{{ tenant.username }}</a
+          ></small
+        >
+      </li>
+    </ul>
+    {% empty %}
+    <small>Empty</small><br />
+    {% endfor %}
+    <small
+      ><a
+        class="article-title"
+        href="{% url 'addressDetails' property.address.id %}"
+      >
+        <b> Address: </b>{{property.address}}</a
+      ></small
+    >
+    <br />
+  </div>
+</article>
+{% endblock content %}
+{% block details_view_actions %}
+  <li class="list-group-item list-group-item-light"><button id="editBtn" class="btn btn-outline-danger" type="submit">Edit Property</button></li>
+  <li class="list-group-item list-group-item-light"><button id="deleteBtn" class="btn btn-outline-danger" type="submit">Delete</button></li>
+  <script type="text/javascript">
+    document.getElementById("deleteBtn").onclick = function () {
+    location.href = "{% url 'propertyDelete' property.id %}";
+    };
+    document.getElementById("editBtn").onclick = function () {
+    location.href = "{% url 'propertyEdit' property.id %}";
+    };
+  </script>
+{% endblock details_view_actions %}
+
